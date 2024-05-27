@@ -1,7 +1,6 @@
 import requests
 import json
 from os import path
-
 import recipe_finder
 
 
@@ -156,7 +155,8 @@ def create_minimized_html(cleaned_recipe):
     """
     # Get template lines
     working_path = path.dirname(path.abspath(__file__))
-    with open(r"{}\recipe\single-recipe-template.html".format(working_path)) as f:
+    template_path = path.join(working_path, "recipe", "single-recipe-template.html")
+    with open(template_path) as f:
         lines = f.readlines()
     final_lines = []
 

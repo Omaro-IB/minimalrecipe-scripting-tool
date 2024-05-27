@@ -29,7 +29,7 @@ def main(args):
     """
     from os import path
     # DIRECTORY MANAGEMENT
-    dir_path = path.dirname(path.abspath(__file__)) + "\\dir.txt"  # recipe storage directory
+    dir_path = path.join(path.dirname(path.abspath(__file__)), "dir.txt")  # recipe storage directory
 
     try:  # get recipe storage path
         file = open(dir_path, "r")
@@ -83,7 +83,8 @@ def main(args):
                    "cookTime": input("Enter cook time: "), "totalTime": input("Enter total time: "),
                    "recipeIngredients": input("Enter ingredients (; seperated): ").split(";"),
                    "recipeInstructions": input("Enter instructions (; seperated): ").split(";")}
-        with open("{}\\{}.html".format(recipes_path, cleaned["name"]), "w+") as f:
+        full_path = path.join(recipes_path, cleaned["name"] + ".html")
+        with open(full_path, "w+") as f:
             f.writelines(create_minimized_html(cleaned))  # create minimized html
         exit()
 
@@ -116,15 +117,15 @@ def main(args):
         print('We could not find the dish "{}"'.format(entered_dish_name))
     else:  # no unhandled or handled errors
         name, data = val
-        full_path = "{}\\{}.html".format(recipes_path, name)
+        full_path = path.join(recipes_path, name + ".html")
         while path.isfile(full_path):  # ensure no file override
-            name = name + "!"
-            full_path = "{}\\{}.html".format(recipes_path, name)
+            name = name + " (copy)"
+            full_path = path.join(recipes_path, name + ".html")
         with open(full_path, "w+", encoding="utf-16") as f:  # finally, write the HTML data
             f.writelines(data)
             if open_recipe:  # open file if flag is set
-                path = recipes_path.replace("\\", "/")
-                open_new("file:///{}/{}.html".format(path, name))
+                # path = recipes_path.replace("\\", "/")
+                open_new("file://{}".format(full_path))
 
 
 if __name__ == "__main__":
