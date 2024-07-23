@@ -1,4 +1,4 @@
-# minimalrecipe-scripting-tool
+# Recipe Minimizer
 A scripting project developed for scraping recipe pages and extract the important information into an easy-to-digest HTML/CSS page
 
 ## Usage
