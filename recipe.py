@@ -27,23 +27,9 @@ def main(args):
     :param args: list of arguments; [Link or Name of dish / "manual", Options]
     :return: None
     """
+    from os import getcwd
     from os import path
-    # DIRECTORY MANAGEMENT
-    dir_path = path.join(path.dirname(path.abspath(__file__)), "dir.txt")  # recipe storage directory
-
-    try:  # get recipe storage path
-        file = open(dir_path, "r")
-        recipes_path = file.read()
-        if not path.isdir(recipes_path):
-            raise FileNotFoundError
-        file.close()
-    except FileNotFoundError:  # no recipe storage path -> ask user for input
-        d = input("First time usage- enter the full directory of the recipe folder: ")
-        while not path.isdir(d):
-            d = input("Invalid directory- try again: ")
-        with open(dir_path, "w+") as file:
-            file.write(d)
-        recipes_path = d
+    recipes_path = getcwd()  # recipe storage directory
 
     # ARGUMENT HANDLING
     if len(args) == 0:  # User entered "?" or no arguments
@@ -51,22 +37,13 @@ def main(args):
         print("\nCommands:\n  dish name: finds the recipe based on the name of the dish\n  "
               "Web URL: extracts recipe from given (full) URL\n  "
               "manual: enters manual mode, asks for recipe")
-        print("\nOptions:\n  --open: automatically open the recipe in your web browser\n  "
-              "--changedir: change directory of recipes and exit")
+        print("\nOptions:\n  --open: automatically open the recipe in your web browser")
         return
 
     if args[-1] == "--open":  # User wants to open recipe after creation
         entered_dish_name = " ".join(args[:-1])
         arg = "%20".join(args[:-1])
         open_recipe = True  # set open recipe flag
-
-    elif args[-1] == "--changedir":  # Change recipe storage directory
-        d = input("Enter the full directory of the recipe folder: ")
-        while not path.isdir(d):
-            d = input("Invalid directory- try again: ")
-        with open(dir_path, "w+") as file:
-            file.write(d)
-        exit()
 
     else:  # no options given
         entered_dish_name = " ".join(args)
@@ -103,7 +80,7 @@ def main(args):
         else:
             val = url_to_html(url)  # gets (file name, HTML) from url
     except Exception as e:  # unhandled exception
-        print("An unexpected error occurred")
+        print("An unexpected error occurred while retrieving page")
         print(e)
         exit()
 
@@ -124,8 +101,8 @@ def main(args):
         with open(full_path, "w+", encoding="utf-16") as f:  # finally, write the HTML data
             f.writelines(data)
             if open_recipe:  # open file if flag is set
-                # path = recipes_path.replace("\\", "/")
                 open_new("file://{}".format(full_path))
+            print("Saved recipe to {}".format(full_path))
 
 
 if __name__ == "__main__":
