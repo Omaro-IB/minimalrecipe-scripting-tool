@@ -197,7 +197,7 @@ def url_to_html(url):
     try:
         html = get_html(url)
     except (requests.exceptions.InvalidURL, requests.exceptions.ConnectionError, requests.exceptions.RequestException):
-        return -2
+        return -3
     recipe = get_recipe(html, lookfor='"@type":"Recipe"')  # Step 1: Get HTML code and extract JSON
 
     if recipe is None:  # Step 1: try again with different lookfor

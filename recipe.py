@@ -92,6 +92,8 @@ def main(args):
         exit()
     elif val == -2:  # error code -2: dish name error
         print('We could not find the dish "{}"'.format(entered_dish_name))
+    elif val == -3:  # error code -3: network error
+        print("Network error")
     else:  # no unhandled or handled errors
         name, data = val
         full_path = path.join(recipes_path, name + ".html")
@@ -114,3 +116,4 @@ if __name__ == "__main__":
     except Exception as er:
         print("Unknown error (fatal)")
         print(er)
+
